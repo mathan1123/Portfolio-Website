@@ -32,8 +32,8 @@ const projects = [
   'Designed and developed a responsive portfolio website using React to showcase projects and skills.',
   tags: ['React', 'Tailwind CSS'],
   links: {
-    demo: '',
-    code: '#'
+    demo: 'https://portfolio-website-ten-mauve-36.vercel.app/',
+    code: 'https://github.com/mathan1123/Portfolio-Website.git'
   },
   color: 'bg-pink-500'
 }];
