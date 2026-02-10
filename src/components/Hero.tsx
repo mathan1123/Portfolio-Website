@@ -113,8 +113,8 @@ export function Hero() {
                 Contact Me
               </motion.a>
               <motion.a
-                href="/Resume.pdf"
-                download="Mathan_Resume.pdf"
+                href="/MATHAN-RESUME.jpeg"
+                download="MATHAN-RESUME.jpeg"
                 whileHover={{
                   scale: 1.05
                 }}
@@ -122,7 +122,6 @@ export function Hero() {
                   scale: 0.95
                 }}
                 className="px-8 py-4 rounded-lg bg-surface border border-white/10 text-white font-medium hover:bg-white/5 transition-colors flex items-center gap-2">
-
                 Resume <Download size={20} />
               </motion.a>
             </div>

@@ -10,20 +10,46 @@ export function Contact() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setFormState({
-        name: '',
-        email: '',
-        message: ''
+    setSubmitMessage('');
+
+    try {
+      // Using Formspree service (free, no setup required)
+      const response = await fetch('https://formspree.io/f/xyzgvnbk', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          message: formState.message
+        })
       });
-      alert('Message sent successfully!');
-    }, 1500);
+
+      if (response.ok) {
+        setSubmitMessage('Message sent successfully!');
+        setFormState({
+          name: '',
+          email: '',
+          message: ''
+        });
+        setTimeout(() => setSubmitMessage(''), 3000);
+      } else {
+        setSubmitMessage('Failed to send message. Please try again.');
+        setTimeout(() => setSubmitMessage(''), 3000);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSubmitMessage('An error occurred. Please try again later.');
+      setTimeout(() => setSubmitMessage(''), 3000);
+    }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -199,6 +225,18 @@ export function Contact() {
                   </>
                 )}
               </motion.button>
+              {submitMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`p-3 rounded-lg text-center font-mono text-sm ${
+                    submitMessage.includes('successfully')
+                      ? 'bg-green-500/10 text-green-400 border border-green-500/30'
+                      : 'bg-red-500/10 text-red-400 border border-red-500/30'
+                  }`}>
+                  {submitMessage}
+                </motion.div>
+              )}
             </form>
           </motion.div>
         </div>

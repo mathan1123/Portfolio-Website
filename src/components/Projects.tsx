@@ -9,7 +9,7 @@ const projects = [
   'Feature including Card verification,Entitlement check ,Stock Management,  Reciept generation and admin Dashboard.',
   tags: ['React', 'Typescript', 'java', 'Spring Boot', 'MySql'],
   links: {
-    demo: '#',
+    demo: 'https://rationshop.netlify.app/',
     code: 'https://github.com/mathan1123/Smart-Ration.git'
   },
   color: 'bg-blue-500'
@@ -20,7 +20,7 @@ const projects = [
   'Vehicle Entry and Exit Management,parking slot allocation and billing.',
   tags: ['React', 'Python', 'Django', 'MySql', 'Excel'],
   links: {
-    demo: '#',
+    demo: 'https://smartparkingmanagement.netlify.app/',
     code: 'https://github.com/mathan1123/Parking-Management.git'
   },
   color: 'bg-blue-500'

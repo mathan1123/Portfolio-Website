@@ -14,7 +14,7 @@ const certifications = [
   {
     title: 'Application Developer Web & Mobile',
     issuer: 'By Skill Competency Council of India under PMKVY.',
-    date: '2023',
+    date: '2025',
     color: 'from-cyan-500 to-blue-600',
     verificationUrl: 'https://www.coursera.org/meta',
     imageUrl: '/cert-web.jpeg'
@@ -22,7 +22,7 @@ const certifications = [
   {
     title: 'Python Programming',
     issuer: 'Complete the Foundational Python Programming Course in CodeFobe.',
-    date: '2023',
+    date: '2025',
     color: 'from-blue-500 to-green-500',
     verificationUrl: 'https://nptel.ac.in/',
     imageUrl: '/cert-python.jpeg'
