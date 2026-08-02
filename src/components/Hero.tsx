@@ -19,7 +19,7 @@ export function Hero() {
     setDownloadingResume(true);
     setTimeout(() => {
       const link = document.createElement('a');
-      link.href = '/MATHAN-RESUME.jpeg';
+      link.href = `${import.meta.env.BASE_URL}MATHAN-RESUME.jpeg`;
       link.download = 'MATHAN(Resume).jpeg';
       document.body.appendChild(link);
       link.click();
@@ -185,7 +185,7 @@ export function Hero() {
                 className="relative z-10 rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-surface group max-w-sm mx-auto"
               >
                 <img
-                  src="/MathanS.jpeg"
+                  src={`${import.meta.env.BASE_URL}MathanS.jpeg`}
                   alt="Mathan"
                   className="w-full h-[400px] object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700"
                 />

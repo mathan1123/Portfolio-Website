@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Section } from './ui/Section';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, ExternalLink, X } from 'lucide-react';
+const BASE = import.meta.env.BASE_URL;
+
 const certifications = [
   {
     id: '01',
@@ -10,7 +12,7 @@ const certifications = [
     date: 'Dec 2025-Jan 2026',
     color: 'from-orange-500 to-red-600',
     verificationUrl: 'https://infosysspringboard.onwingspan.com/',
-    imageUrl: '/cert-java.jpeg'
+    imageUrl: `${BASE}cert-java.jpeg`
   },
   {
     id: '02',
@@ -19,7 +21,7 @@ const certifications = [
     date: '2025',
     color: 'from-cyan-500 to-blue-600',
     verificationUrl: 'https://www.coursera.org/meta',
-    imageUrl: '/cert-web.jpeg'
+    imageUrl: `${BASE}cert-web.jpeg`
   },
   {
     id: '03',
@@ -28,7 +30,7 @@ const certifications = [
     date: '2025',
     color: 'from-blue-500 to-green-500',
     verificationUrl: 'https://nptel.ac.in/',
-    imageUrl: '/cert-python.jpeg'
+    imageUrl: `${BASE}cert-python.jpeg`
   },
   {
     id: '04',
@@ -36,7 +38,7 @@ const certifications = [
     issuer: 'National Skill Development Corporation.',
     date: '2026',
     color: 'from-purple-500 to-yellow-500',
-    imageUrl: '/cert-data-analytics.jpeg'
+    imageUrl: `${BASE}cert-data-analytics.jpeg`
   }
 ];
 
