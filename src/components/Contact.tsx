@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Section } from './ui/Section';
 import { motion } from 'framer-motion';
-import { Send, Terminal, Mail, Github, Linkedin, MapPin, Phone } from 'lucide-react';
+import { Send, Terminal, Mail, Github, Linkedin, MapPin, Phone, Cpu, ShieldCheck } from 'lucide-react';
 
 export function Contact() {
   const [formState, setFormState] = useState({
@@ -10,59 +10,73 @@ export function Contact() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState('');
+  const [submitMessage, setSubmitMessage] = useState({ text: '', type: '' });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitMessage('');
+    setSubmitMessage({ text: '', type: '' });
 
     try {
-      // Using FormSubmit - simple, no setup needed
-      const formData = new FormData();
-      formData.append('name', formState.name);
-      formData.append('email', formState.email);
-      formData.append('message', formState.message);
-      formData.append('_captcha', 'false');
-      formData.append('_next', window.location.href);
-
-      const response = await fetch('https://formsubmit.co/mathan112325@gmail.com', {
+      // Send JSON instead of FormData for better CORS support with formsubmit.co
+      const response = await fetch('https://formsubmit.co/ajax/mathan112325@gmail.com', {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: formData
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          _subject: `New Portfolio Contact from ${formState.name}`,
+          _template: 'box'
+        })
       });
 
-      if (response.ok) {
-        setSubmitMessage('Message sent successfully!');
-        setFormState({
-          name: '',
-          email: '',
-          message: ''
-        });
-        setTimeout(() => setSubmitMessage(''), 3000);
+      const data = await response.json();
+
+      if (response.ok && data.success === "true") {
+        setSubmitMessage({ text: 'Transmission successful! Message received.', type: 'success' });
+        setFormState({ name: '', email: '', message: '' });
       } else {
-        setSubmitMessage('Failed to send message. Please try again.');
-        setTimeout(() => setSubmitMessage(''), 3000);
+        throw new Error(data.message || 'Failed to send message');
       }
     } catch (error) {
       console.error('Error:', error);
-      setSubmitMessage('An error occurred. Please try again later.');
-      setTimeout(() => setSubmitMessage(''), 3000);
+      // Fallback for network/CORS issues
+      setSubmitMessage({ 
+        text: 'Network error. Please email directly at mathan112325@gmail.com', 
+        type: 'error' 
+      });
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitMessage({ text: '', type: '' }), 5000);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
-    <Section id="contact" className="mb-20">
+    <Section id="contact" className="relative z-10 mb-20">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 flex items-center gap-3">
-            <span className="text-secondary font-mono">04.</span> Get In Touch
-          </h2>
-          <div className="h-1 w-20 bg-secondary rounded-full mb-8" />
+        <div className="mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-4 mb-4"
+          >
+            <div className="h-[1px] w-12 bg-accent" />
+            <span className="section-number text-accent">04.</span>
+          </motion.div>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold font-sans tracking-tight"
+          >
+            Initialize <span className="text-shimmer" style={{ backgroundImage: 'linear-gradient(90deg, #f43f5e 0%, #8b5cf6 50%, #f43f5e 100%)' }}>Connection</span>
+          </motion.h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -74,46 +88,33 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-4 text-white">Contact Information</h3>
-              <p className="text-gray-400 max-w-md leading-relaxed">
-                I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+              <p className="text-slate-400 max-w-md leading-relaxed text-lg">
+                I'm currently looking for new opportunities. Whether you have a question, a project idea, or just want to connect, my inbox is always open.
               </p>
             </div>
 
             <div className="space-y-6">
-              <div className="flex items-center gap-4 group">
-                <div className="w-12 h-12 rounded-lg bg-surface border border-white/5 flex items-center justify-center text-secondary group-hover:border-secondary/50 transition-colors">
-                  <Mail size={20} />
+              {[
+                { icon: <Mail size={20} />, label: "Email Network", value: "mathan112325@gmail.com", color: "text-cyan-400", bg: "bg-cyan-400/10", border: "border-cyan-400/20" },
+                { icon: <Phone size={20} />, label: "Direct Comm", value: "+91 9514338512", color: "text-purple-400", bg: "bg-purple-400/10", border: "border-purple-400/20" },
+                { icon: <MapPin size={20} />, label: "Coordinates", value: "Tamil Nadu, India", color: "text-pink-400", bg: "bg-pink-400/10", border: "border-pink-400/20" }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-5 group glass-card p-4 rounded-xl border-transparent hover:border-white/10 transition-all cursor-default">
+                  <div className={`w-12 h-12 rounded-xl ${item.bg} ${item.border} border flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">{item.label}</p>
+                    <p className="text-slate-200 font-medium">{item.value}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-mono text-gray-500 uppercase tracking-wider">Email</p>
-                  <p className="text-gray-200">mathan112325@gmail.com</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 group">
-                <div className="w-12 h-12 rounded-lg bg-surface border border-white/5 flex items-center justify-center text-secondary group-hover:border-secondary/50 transition-colors">
-                  <Phone size={20} />
-                </div>
-                <div>
-                  <p className="text-xs font-mono text-gray-500 uppercase tracking-wider">Phone</p>
-                  <p className="text-gray-200">+91 9514338512</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 group">
-                <div className="w-12 h-12 rounded-lg bg-surface border border-white/5 flex items-center justify-center text-secondary group-hover:border-secondary/50 transition-colors">
-                  <MapPin size={20} />
-                </div>
-                <div>
-                  <p className="text-xs font-mono text-gray-500 uppercase tracking-wider">Location</p>
-                  <p className="text-gray-200">Tamil Nadu, India</p>
-                </div>
-              </div>
+              ))}
             </div>
 
-            <div className="pt-4">
-              <p className="text-sm font-mono text-gray-500 mb-4 uppercase tracking-wider">Connect with me</p>
+            <div className="pt-6">
+              <p className="text-sm font-mono text-slate-500 mb-4 uppercase tracking-wider flex items-center gap-2">
+                <Cpu size={16} /> Digital Footprint
+              </p>
               <div className="flex gap-4">
                 {[
                   { icon: <Github size={20} />, href: "https://github.com/mathan1123", label: "Github" },
@@ -123,9 +124,9 @@ export function Contact() {
                   <motion.a
                     key={social.label}
                     href={social.href}
-                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-10 h-10 rounded-lg bg-surface border border-white/5 flex items-center justify-center text-gray-400 hover:text-secondary hover:border-secondary/30 transition-all"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-12 h-12 rounded-xl glass-card flex items-center justify-center text-slate-400 hover:text-accent hover:border-accent/40 transition-all shadow-lg"
                   >
                     {social.icon}
                   </motion.a>
@@ -139,112 +140,115 @@ export function Contact() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-surface border border-white/10 rounded-xl overflow-hidden shadow-2xl"
+            className="relative group perspective-1000"
           >
-            {/* Terminal Header */}
-            <div className="bg-muted px-4 py-2 flex items-center gap-2 border-b border-white/5">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-              </div>
-              <div className="flex-1 text-center text-xs font-mono text-gray-500">
-                contact-form.
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-mono text-primary">
-                    Name =
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    required
-                    value={formState.name}
-                    onChange={(e) =>
-                      setFormState({
-                        ...formState,
-                        name: e.target.value
-                      })
-                    }
-                    className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-700"
-                    placeholder='"Mathan"' />
+            {/* Ambient glow behind form */}
+            <div className="absolute -inset-1 bg-gradient-to-br from-primary via-secondary to-accent rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition duration-500" />
+            
+            <div className="relative glass-card rounded-2xl overflow-hidden border border-white/10 group-hover:border-white/20 transition-all">
+              {/* Terminal Header */}
+              <div className="bg-surface-2/80 px-4 py-3 flex items-center justify-between border-b border-white/5">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-mono text-primary">
-                    Email =
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    required
-                    value={formState.email}
-                    onChange={(e) =>
-                      setFormState({
-                        ...formState,
-                        email: e.target.value
-                      })
-                    }
-                    className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-700"
-                    placeholder='EMAIL_ADDRESS' />
+                <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+                  <ShieldCheck size={14} className="text-green-400" /> secure-connection.exe
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="message" className="text-sm font-mono text-primary">
-                  Message =
-                </label>
-                <textarea
-                  id="message"
-                  required
-                  rows={5}
-                  value={formState.message}
-                  onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      message: e.target.value
-                    })
-                  }
-                  className="w-full bg-background border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-gray-700 resize-none"
-                  placeholder='"Hello, I would like to discuss..."' />
-              </div>
+              <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6 relative">
+                {/* Background Grid inside form */}
+                <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                disabled={isSubmitting}
-                type="submit"
-                className="w-full bg-primary text-background font-bold py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                {isSubmitting ? (
-                  <span className="animate-pulse">Sending...</span>
-                ) : (
-                  <>
-                    <Terminal size={18} />
-                    <span>Execute Send</span>
-                    <Send size={18} />
-                  </>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="text-xs font-mono text-primary uppercase tracking-wider">
+                      User_Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      required
+                      value={formState.name}
+                      onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                      className="w-full bg-surface-2/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:bg-surface-2 transition-all placeholder:text-slate-600 font-mono text-sm"
+                      placeholder='const name = "Mathan";' 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-xs font-mono text-primary uppercase tracking-wider">
+                      Return_Address
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      required
+                      value={formState.email}
+                      onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                      className="w-full bg-surface-2/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:bg-surface-2 transition-all placeholder:text-slate-600 font-mono text-sm"
+                      placeholder='user@network.com' 
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2 relative z-10">
+                  <label htmlFor="message" className="text-xs font-mono text-primary uppercase tracking-wider">
+                    Payload_Data
+                  </label>
+                  <textarea
+                    id="message"
+                    required
+                    rows={5}
+                    value={formState.message}
+                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                    className="w-full bg-surface-2/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:bg-surface-2 transition-all placeholder:text-slate-600 font-mono text-sm resize-none"
+                    placeholder='> Enter your message here...' 
+                  />
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="w-full btn-neon font-mono uppercase tracking-widest text-sm py-4 rounded-xl flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed relative z-10"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+                        <Cpu size={18} />
+                      </motion.div>
+                      Processing...
+                    </span>
+                  ) : (
+                    <>
+                      <Terminal size={18} />
+                      <span>Execute Send</span>
+                      <Send size={18} />
+                   </>
+                  )}
+                </motion.button>
+                
+                {submitMessage.text && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`p-4 rounded-xl text-center font-mono text-sm relative z-10 ${
+                      submitMessage.type === 'success'
+                        ? 'bg-green-500/10 text-green-400 border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.1)]'
+                        : 'bg-red-500/10 text-red-400 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
+                    }`}
+                  >
+                    {submitMessage.text}
+                  </motion.div>
                 )}
-              </motion.button>
-              {submitMessage && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`p-3 rounded-lg text-center font-mono text-sm ${
-                    submitMessage.includes('successfully')
-                      ? 'bg-green-500/10 text-green-400 border border-green-500/30'
-                      : 'bg-red-500/10 text-red-400 border border-red-500/30'
-                  }`}>
-                  {submitMessage}
-                </motion.div>
-              )}
-            </form>
+              </form>
+            </div>
           </motion.div>
         </div>
       </div>
     </Section>
   );
-
 }
