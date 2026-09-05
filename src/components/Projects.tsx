@@ -15,6 +15,7 @@ const projects = [
     color: 'from-cyan-500 to-blue-500'
   },
   {
+<<<<<<< HEAD
     title: 'QuickFix',
     description: 'QUICKFIX – A MERN Stack service booking platform that connects users with available technicians for on-demand services, featuring technician availability, service requests, real-time status tracking, and ratings & reviews.',
     tags: ['React', 'Node.js', 'Express.js' 'MongoDB'],
@@ -25,6 +26,8 @@ const projects = [
     color: 'green-500 to-blue-500'
   },
   {
+=======
+>>>>>>> 0d87d94e7d82831b4ff2af16564036a1d4e7c8bc
     title: 'Kickstart Digital',
     description: 'Kickstart Digital is a conversion-focused digital marketing landing page built with WordPress, featuring responsive design, clear CTAs, services, and enquiry sections to support business growth.',
     tags: ['WordPress', 'PHP', 'HTML&CSS', 'JavaScript', 'Responsive Design'],
@@ -35,6 +38,7 @@ const projects = [
     color: 'from-orange-500 to-yellow-500'
   },
   {
+<<<<<<< HEAD
     title: 'Fuel-Expense-Tracker',
     description: 'Build a Fuel Expense Tracker using Django + MySQL. Features: - Vehicle details - Fuel amount entry - Litres entry - Kilometres entry - Automatic mileage calculation Formula: Mileage = KM / Litres Tech Stack: - Python - Django - MySQL'
     tags: ['React', 'Node.js', 'Express.js', 'MySQL'],
@@ -45,6 +49,8 @@ const projects = [
     color: 'white-500 to-blue-500'
   },
   {
+=======
+>>>>>>> 0d87d94e7d82831b4ff2af16564036a1d4e7c8bc
     title: 'Student Performance Analytics',
     description: 'Streamlit app built using Python and Pandas to analyze student results. Calculates grades, pass/fail status, and shows class analytics & reports.',
     tags: ['Streamlit', 'Python', 'Pandas', 'Data Analysis'],
