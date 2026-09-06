@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowRight, Github, Linkedin, Mail, Download, Sparkles, Brain, Code2, Cpu } from 'lucide-react';
 
 // ===== FLOATING PARTICLE =====
@@ -112,58 +112,6 @@ function RoleTypewriter() {
         style={{ display: 'inline-block', verticalAlign: 'middle' }}
       />
     </span>
-  );
-}
-
-// ===== MAGNETIC BUTTON =====
-interface MagneticButtonProps {
-  children: React.ReactNode;
-  className?: string;
-  href?: string;
-  onClick?: () => void;
-  disabled?: boolean;
-  as?: 'a' | 'button';
-}
-
-function MagneticButton({ children, className = '', href, onClick, disabled, as: Tag = 'a' }: MagneticButtonProps) {
-  const ref = useRef<HTMLElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 300, damping: 30 });
-  const springY = useSpring(y, { stiffness: 300, damping: 30 });
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    x.set((e.clientX - cx) * 0.25);
-    y.set((e.clientY - cy) * 0.25);
-  }, [x, y]);
-
-  const handleMouseLeave = useCallback(() => {
-    x.set(0);
-    y.set(0);
-  }, [x, y]);
-
-  const props: Record<string, unknown> = {
-    ref,
-    className,
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
-    style: { x: springX, y: springY },
-    ...(href ? { href } : {}),
-    ...(onClick ? { onClick } : {}),
-    ...(disabled !== undefined ? { disabled } : {}),
-  };
-
-  return (
-    <motion.a
-      {...(props as React.ComponentProps<typeof motion.a>)}
-      href={href}
-    >
-      {children}
-    </motion.a>
   );
 }
 
@@ -375,10 +323,9 @@ export function Hero() {
               <motion.div
                 key={i}
                 className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ color: item.color, background: `${item.color}15`, border: `1px solid ${item.color}40` }}
+                style={{ transformOrigin: 'center center', color: item.color, background: `${item.color}15`, border: `1px solid ${item.color}40` }}
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 12, repeat: Infinity, ease: 'linear', delay: item.delay }}
-                transformOrigin="center center"
               >
                 <motion.div
                   style={{ originX: '50%', originY: '50%' }}

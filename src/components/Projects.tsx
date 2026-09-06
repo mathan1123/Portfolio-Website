@@ -1,9 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { Section } from './ui/Section';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Github, ExternalLink, Folder, ArrowUpRight } from 'lucide-react';
+import { Github, Folder, ArrowUpRight } from 'lucide-react';
 
-const projects = [
+interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  links: {
+    demo: string;
+    code: string;
+  };
+  color: string;
+}
+
+const projects: Project[] = [
   {
     title: 'Where TO Watch',
     description: 'Full-stack Movie finder application that displays movie information, rating, real-time movie details and OTT Streaming Availability.',
@@ -15,10 +26,10 @@ const projects = [
     color: 'from-cyan-500 to-blue-500'
   },
   {
-<<<<<<< HEAD
+
     title: 'QuickFix',
     description: 'QUICKFIX – A MERN Stack service booking platform that connects users with available technicians for on-demand services, featuring technician availability, service requests, real-time status tracking, and ratings & reviews.',
-    tags: ['React', 'Node.js', 'Express.js' 'MongoDB'],
+    tags: ['React', 'Node.js', 'Express.js', 'MongoDB'],
     links: {
       demo: 'https://quickfix-apa4.onrender.com/',
       code: 'https://github.com/mathan1123/QuickFix.git'
@@ -26,8 +37,7 @@ const projects = [
     color: 'green-500 to-blue-500'
   },
   {
-=======
->>>>>>> 0d87d94e7d82831b4ff2af16564036a1d4e7c8bc
+
     title: 'Kickstart Digital',
     description: 'Kickstart Digital is a conversion-focused digital marketing landing page built with WordPress, featuring responsive design, clear CTAs, services, and enquiry sections to support business growth.',
     tags: ['WordPress', 'PHP', 'HTML&CSS', 'JavaScript', 'Responsive Design'],
@@ -38,9 +48,9 @@ const projects = [
     color: 'from-orange-500 to-yellow-500'
   },
   {
-<<<<<<< HEAD
+
     title: 'Fuel-Expense-Tracker',
-    description: 'Build a Fuel Expense Tracker using Django + MySQL. Features: - Vehicle details - Fuel amount entry - Litres entry - Kilometres entry - Automatic mileage calculation Formula: Mileage = KM / Litres Tech Stack: - Python - Django - MySQL'
+    description: 'Build a Fuel Expense Tracker using Django + MySQL. Features: - Vehicle details - Fuel amount entry - Litres entry - Kilometres entry - Automatic mileage calculation Formula: Mileage = KM / Litres Tech Stack: - Python - Django - MySQL',
     tags: ['React', 'Node.js', 'Express.js', 'MySQL'],
     links: {
       demo: 'https://fuel-expense-tracker.onrender.com/',
@@ -49,8 +59,7 @@ const projects = [
     color: 'white-500 to-blue-500'
   },
   {
-=======
->>>>>>> 0d87d94e7d82831b4ff2af16564036a1d4e7c8bc
+
     title: 'Student Performance Analytics',
     description: 'Streamlit app built using Python and Pandas to analyze student results. Calculates grades, pass/fail status, and shows class analytics & reports.',
     tags: ['Streamlit', 'Python', 'Pandas', 'Data Analysis'],
@@ -82,7 +91,7 @@ const projects = [
   }
 ];
 
-const TiltCard = ({ project, idx }: { project: any, idx: number }) => {
+const TiltCard = ({ project, idx }: { project: Project; idx: number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   
@@ -157,13 +166,25 @@ const TiltCard = ({ project, idx }: { project: any, idx: number }) => {
                 <Folder size={24} />
               </div>
               <div className="flex gap-2">
-                {project.links.github && (
-                  <a href={project.links.github} className="p-2 bg-surface/80 backdrop-blur-md rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                {project.links.code && (
+                  <a
+                    href={project.links.code}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`View ${project.title} source code on GitHub`}
+                    className="p-2 bg-surface/80 backdrop-blur-md rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                  >
                     <Github size={18} />
                   </a>
                 )}
                 {project.links.demo && (
-                  <a href={project.links.demo} className="p-2 bg-surface/80 backdrop-blur-md rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                  <a
+                    href={project.links.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${project.title} live demo`}
+                    className="p-2 bg-surface/80 backdrop-blur-md rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                  >
                     <ArrowUpRight size={18} />
                   </a>
                 )}
